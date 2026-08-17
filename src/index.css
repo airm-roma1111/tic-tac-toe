@@ -1,23 +1,56 @@
 :root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+
   font-size: 16px;
-  line-height: 24px;
+  line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+
+  --primary-color: #00f829;
+  --bg-color: #242424;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --border-color: #00f829;
+  --gap: clamp(6px, 1.5vw, 12px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  min-height: 100dvh;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,67 +61,149 @@ body {
   overflow-x: hidden;
 }
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+/* =========================================
+   TABLERO PRINCIPAL
+   ========================================= */
 
 .board {
-  width: 100%;
-  max-width: 420px;
-  padding: 16px;
-  margin: 0 auto;
+  width: min(
+    92vw,
+    500px,
+    calc(100dvh - 60px)
+  );
+
+  min-height: min(92dvh, 800px);
+
+  padding: clamp(12px, 2vw, 24px);
+
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   text-align: center;
 }
 
+/* =========================================
+   TITULO
+   ========================================= */
+
 .board h1 {
-  color: #00f829;
-  margin-bottom: 20px;
+  width: 100%;
+
+  color: var(--primary-color);
+
+  margin-bottom: clamp(6px, 1.5vh, 15px);
+
+  font-size: clamp(
+    1.6rem,
+    6vw,
+    3rem
+  );
+
+  line-height: 1.1;
+
+  text-align: center;
 }
 
+/* =========================================
+   BOTONES
+   ========================================= */
+
 .board button {
-  padding: 8px 12px;
-  margin: 25px;
+  padding: clamp(6px, 1.5vw, 10px)
+           clamp(12px, 3vw, 18px);
+
+  margin: clamp(6px, 1.5vh, 15px) 0;
+
   background: transparent;
-  border: 4px solid #575656;
-  color: #eee;
-  width: 100px;
+
+  border: 2px solid #575656;
   border-radius: 24px;
 
-  transition: 0.2s;
+  color: #eee;
+
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
   font-weight: bold;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .board button:hover {
-  background: #00f829;
+  background: var(--primary-color);
   color: #222;
 }
 
+.board button:active {
+  transform: scale(0.96);
+}
+
+/* =========================================
+   TABLERO 3 x 3
+   ========================================= */
+
 .board .game {
+  width: min(
+    100%,
+    65dvh,
+    460px
+  );
+
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Usamos tres columnas de 1 fracción que se tienen que repetir tres veces */
-  gap: 10px;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: var(--gap);
+
+  margin: clamp(4px, 1vh, 12px) auto;
 }
 
-.turn {
-  display: flex;
-  justify-content: center;
-  margin: 15px auto;
-  width: fit-content;
-  position: relative;
-  border-radius: 10px;
+/* =========================================
+   CASILLAS
+   ========================================= */
+
+.square {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  border: 2px solid var(--border-color);
+  border-radius: clamp(5px, 1vw, 8px);
+
+  display: grid;
+  place-items: center;
+
+  background: transparent;
+
+  font-size: clamp(
+    2rem,
+    8vw,
+    3.5rem
+  );
+
+  line-height: 1;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
-.turn .square,
-.winner .square {
-  width: 70px;
-  height: 70px;
-  pointer-events: none;
-  border-color: transparent;
-  cursor: pointer;
+.square:hover {
+  background: rgba(0, 248, 41, 0.08);
+}
+
+.square:active {
+  transform: scale(0.96);
 }
 
 .square.is-selected {
@@ -96,75 +211,207 @@ body {
   background: #313131;
 }
 
+/* =========================================
+   INDICADOR DE TURNO
+   ========================================= */
+
+.turn {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: clamp(6px, 2vw, 12px);
+
+  margin: clamp(8px, 2vh, 20px) 0;
+}
+
+.turn .square,
+.winner .square {
+  width: clamp(
+    38px,
+    12vw,
+    150px
+  );
+
+  height: clamp(
+    38px,
+    12vw,
+    150px
+  );
+
+  aspect-ratio: 1 / 1;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   GANADOR / MODAL
+   ========================================= */
+
 .winner {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100dvh;
+
   display: grid;
   place-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.7);
+
+  z-index: 100;
 }
 
 .winner .text {
+  width: min(
+    90vw,
+    360px
+  );
+
+  min-height: 260px;
+
+  padding: clamp(20px, 5vw, 32px);
+
   background: #111;
-  height: 300px;
-  width: 320px;
+
   border: 2px solid #eee;
-  border-radius: 10px;
+  border-radius: 12px;
+
   display: flex;
   flex-direction: column;
+
   justify-content: center;
   align-items: center;
-  gap: 20px;
+
+  gap: clamp(12px, 3vh, 20px);
+
+  text-align: center;
 }
 
 .winner .win {
-  margin: 0 auto;
   width: fit-content;
+
+  margin: 0 auto;
+
+  padding: 8px;
+
   border: 2px solid #eee;
   border-radius: 10px;
+
   display: flex;
-  gap: 15px;
+
+  gap: clamp(8px, 2vw, 15px);
 }
 
-.square {
-  width: 100px;
-  height: 100px;
-  border: 2px solid #00f829;
-  border-radius: 5px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  font-size: 48px;
-}
+/* =========================================
+   TABLETS
+   ========================================= */
 
-@media (max-width: 480px) {
+@media (min-width: 600px) {
   .board {
-    max-width: 100vw;
-    padding: 12px;
+    width: min(80vw, 600px);
+  }
+
+  .board .game {
+    width: min(
+      60vw,
+      55dvh,
+      500px
+    );
+  }
+}
+
+/* =========================================
+   PANTALLAS MUY PEQUEÑAS
+   ========================================= */
+
+@media (max-height: 600px) {
+  .board {
+    padding: 8px;
   }
 
   .board h1 {
-    font-size: 2rem;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
+    font-size: clamp(1.3rem, 5vw, 2rem);
+  }
+
+  .board button {
+    margin: 4px 0;
+    padding: 5px 12px;
+  }
+
+  .board .game {
+    width: min(
+      75vw,
+      calc(100dvh - 170px)
+    );
+
+    gap: 5px;
+  }
+
+  .turn {
+    margin: 6px 0;
+  }
+}
+
+/* =========================================
+   MÓVILES EN VERTICAL
+   ========================================= */
+
+/* @media (max-width: 480px) {
+  .board {
+    width: 96vw;
+
+    min-height: 100dvh;
+
+    padding:
+      12px
+      8px;
+  }
+
+  .board .game {
+    width: min(
+      92vw,
+      calc(100dvh - 250px)
+    );
+
+    gap: clamp(5px, 1.5vw, 8px);
   }
 
   .square {
-    font-size: 2.2rem;
+    border-width: 1.5px;
+
+    font-size: clamp(
+      1.8rem,
+      12vw,
+      3rem
+    );
+  }
+} */
+
+/* =========================================
+   MÓVILES MUY PEQUEÑOS
+   ========================================= */
+
+/* @media (max-width: 360px) {
+  .board .game {
+    width: min(
+      94vw,
+      calc(100dvh - 220px)
+    );
   }
 
-  .turn .square,
-  .winner .square {
-    width: 60px;
-    height: 60px;
+  .board h1 {
+    font-size: 1.5rem;
   }
 
-  .winner .text {
-    width: 90%;
-    max-width: 320px;
-    height: auto;
-    padding: 24px;
+  .board button {
+    font-size: 0.7rem;
   }
-}
+} */
